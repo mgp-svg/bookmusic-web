@@ -13,15 +13,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: path === "" ? 1 : 0.6,
   }));
 
-  const supabase = createPublicClient();
-  const { data } = await supabase
-    .from("books_with_stats")
-    .select("id, created_at, song_count")
-    .gt("song_count", 0)
-    .order("vote_count", { ascending: false })
-    .limit(5000);
+  // Built at deploy time: a Supabase blip (or a missing env var on a fresh project)
+  // must not fail the whole build over a file that can degrade to static routes.
+  let data: { id: string; created_at: string | null }[] = [];
+  try {
+    const supabase = createPublicClient();
+    const result = await supabase
+      .from("books_with_stats")
+      .select("id, created_at, song_count")
+      .gt("song_count", 0)
+      .order("vote_count", { ascending: false })
+      .limit(5000);
+    data = (result.data ?? []) as typeof data;
+  } catch {
+    return staticRoutes;
+  }
 
-  const books: MetadataRoute.Sitemap = (data ?? []).map((book) => ({
+  const books: MetadataRoute.Sitemap = data.map((book) => ({
     url: `${site}/book/${book.id}`,
     lastModified: book.created_at ? new Date(book.created_at as string) : undefined,
     changeFrequency: "weekly",
