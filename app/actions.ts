@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { resolveHit } from "@/lib/data";
@@ -78,6 +79,21 @@ export async function signInAction(_prev: unknown, formData: FormData): Promise<
   redirect(String(formData.get("next") || "/profile"));
 }
 
+/** Where Supabase should send people after they click the confirmation link.
+ *  Production pins this via NEXT_PUBLIC_SITE_URL; preview deployments and local dev have
+ *  no such value, so fall back to the request's own origin rather than shipping someone
+ *  a link to localhost. Trusting the Host header is safe here precisely because Supabase
+ *  only honours redirects that are on its allow list. */
+async function callbackURL(): Promise<string> {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL;
+  if (configured) return `${configured}/auth/callback`;
+
+  const h = await headers();
+  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
+  const proto = h.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
+  return `${proto}://${host}/auth/callback`;
+}
+
 export async function signUpAction(_prev: unknown, formData: FormData): Promise<{ error?: string; notice?: string }> {
   const supabase = await createClient();
   const email = String(formData.get("email") ?? "").trim();
@@ -95,7 +111,7 @@ export async function signUpAction(_prev: unknown, formData: FormData): Promise<
     password: String(formData.get("password") ?? ""),
     options: {
       data: { username },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/auth/callback`,
+      emailRedirectTo: await callbackURL(),
     },
   });
 
