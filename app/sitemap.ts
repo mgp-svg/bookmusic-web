@@ -7,10 +7,10 @@ const site = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 /** Book pages are the reason this exists on the web: every soundtrack is an indexable page. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes: MetadataRoute.Sitemap = ["", "/search"].map((path) => ({
+  const staticRoutes: MetadataRoute.Sitemap = ["", "/search", "/support", "/privacy"].map((path) => ({
     url: `${site}${path}`,
-    changeFrequency: path === "" ? "daily" : "weekly",
-    priority: path === "" ? 1 : 0.6,
+    changeFrequency: path === "" ? "daily" : path === "/search" ? "weekly" : "yearly",
+    priority: path === "" ? 1 : path === "/search" ? 0.6 : 0.3,
   }));
 
   // Built at deploy time: a Supabase blip (or a missing env var on a fresh project)

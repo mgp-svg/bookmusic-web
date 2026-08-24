@@ -182,3 +182,57 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+@layer components {
+  /* Long-form prose for /privacy and /support — the only place the app runs body copy
+     at length, so the rules live here rather than in a plugin. */
+  .prose-bm p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+
+  .prose-bm p + p,
+  .prose-bm ul + p,
+  .prose-bm p + ul {
+    margin-top: 0.9rem;
+  }
+
+  .prose-bm ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .prose-bm li {
+    padding-left: 1.1rem;
+    position: relative;
+  }
+
+  .prose-bm li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--blue);
+  }
+
+  .prose-bm strong {
+    font-weight: 700;
+  }
+
+  .prose-bm a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: var(--orange);
+  }
+
+  .prose-bm a:hover {
+    color: var(--orange);
+  }
+}
