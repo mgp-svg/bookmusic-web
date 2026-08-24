@@ -99,10 +99,12 @@ export default function PrivacyPage() {
 
       <Section title="Deleting your account">
         <p>
-          You can have your account deleted at any time. Email{" "}
+          You can delete your account yourself, at any time, from inside the app: open the{" "}
+          <strong>You</strong> tab and tap <strong>Delete account</strong>. It takes effect
+          immediately, and it takes your email address, your display name, your username and your
+          votes with it. If you&apos;d rather not do it in the app, email{" "}
           <a href="mailto:contact@mallorygray.io">contact@mallorygray.io</a> from the address on the
-          account, and we will delete it — your email address, your display name, your username and
-          your votes — within 30 days.
+          account and we will delete it within 30 days.
         </p>
         <p>
           Songs you nominated stay on the book pages they belong to, detached from your name, so the

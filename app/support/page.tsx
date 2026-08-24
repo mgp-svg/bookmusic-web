@@ -69,8 +69,10 @@ export default function SupportPage() {
           reset link on the sign-in screen and follow the email.
         </p>
         <p>
-          To delete your account, email <a href="mailto:contact@mallorygray.io">contact@mallorygray.io</a>{" "}
-          from the address on the account and we&apos;ll delete it within 30 days. See the{" "}
+          To delete your account, open the <strong>You</strong> tab in the app and tap{" "}
+          <strong>Delete account</strong>. It happens straight away. You can also email{" "}
+          <a href="mailto:contact@mallorygray.io">contact@mallorygray.io</a> from the address on the
+          account and we&apos;ll do it within 30 days. Either way, see the{" "}
           <Link href="/privacy">privacy policy</Link> for exactly what is removed.
         </p>
       </Section>
